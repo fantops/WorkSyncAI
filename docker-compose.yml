@@ -1,0 +1,38 @@
+version: '3.8'
+
+services:
+  # Backend API
+  backend:
+    build: 
+      context: ./backend
+      dockerfile: Dockerfile
+    ports:
+      - "3001:3001"
+    environment:
+      - NODE_ENV=production
+      - JWT_SECRET=your-production-jwt-secret-change-this
+      - DB_PATH=/app/database/worksync-ai.db
+    volumes:
+      - ./backend/database:/app/database
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:3001/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+    restart: unless-stopped
+
+  # Frontend
+  frontend:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+    ports:
+      - "3000:80"
+    environment:
+      - VITE_API_BASE_URL=http://localhost:3001/api/v1
+    depends_on:
+      - backend
+    restart: unless-stopped
+
+volumes:
+  database_data:

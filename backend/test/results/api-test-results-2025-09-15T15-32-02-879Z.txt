@@ -1,0 +1,82 @@
+🧪 Testing ADO API Endpoints
+
+1️⃣ Testing health endpoint...
+✅ Health: healthy
+   ADO Configured: true
+   Organization: microsoft.visualstudio.com
+
+2️⃣ Testing ADO connection...
+✅ Connection test: Success
+
+3️⃣ Getting ADO projects...
+✅ Found 124 projects
+   1. 📁 Base (ID: ae996aba-e584-4550-9b49-632f5e54004f)
+   2. 📁 SFW (ID: f6c8aaa1-1788-4661-bef4-945204bd441a)
+   3. 📁 Gamestable (ID: 648be095-6e34-424d-ab00-2e345e452538)
+
+✅ Found OS project: OS (8d47e068-03c8-4cdc-aa9b-fc6929290322)
+
+4️⃣ Getting work items from "OS"...
+
+📋 My Work Items:
+   1. [Task] #59151570: LC/LT package build with AMD 0829 and OV 2025.3 RC2
+      State: Started | Priority: 2
+   2. [Task] #59247788: [QNN][HES] - Validate Cache Compilation LoRA Model on Phi 3.6 - Part 2
+      State: Proposed | Priority: 2
+   3. [Task] #59149869: DIO: EP ingestion in PS-ORT
+      State: Proposed | Priority: 2
+   4. [Task] #58359980: Implement Semaphores on UHXB for Concurrent Process Execution
+      State: Proposed | Priority: 2
+   5. [Bug] #59184472: [QNN][HES]: phi lora models fails to run with onnxruntime_perf_test.exe
+      State: Active | Priority: 1
+
+📋 My Backlog Items:
+✅ Found 15 backlog items:
+   1. [Bug] #59184472: [QNN][HES]: phi lora models fails to run with onnxruntime_perf_test.exe
+      State: Active | Assigned: Om Singh
+   2. [Bug] #58494627: [MS->AMD] 07/15 EP Drop - Degradation in PSP1 Compile Time RAM Usage
+      State: Active | Assigned: Om Singh
+   3. [Task] #57719338: Update bash scripts deployed with PSAPI Packages for PerfGates Runs
+      State: Committed | Assigned: Om Singh
+   4. [Task] #59151570: LC/LT package build with AMD 0829 and OV 2025.3 RC2
+      State: Started | Assigned: Om Singh
+   5. [Task] #59247788: [QNN][HES] - Validate Cache Compilation LoRA Model on Phi 3.6 - Part 2
+      State: Proposed | Assigned: Om Singh
+   6. [Deliverable] #59151557: LC/LT Validation for AMD and LNL - AM 8/29 and LNL 8/27
+      State: Proposed | Assigned: Om Singh
+   7. [Task] #59149869: DIO: EP ingestion in PS-ORT
+      State: Proposed | Assigned: Om Singh
+   8. [Deliverable] #59149865: DIO: EP Ingestion into PS-ORT
+      State: Proposed | Assigned: Om Singh
+   9. [Task] #58359980: Implement Semaphores on UHXB for Concurrent Process Execution
+      State: Proposed | Assigned: Om Singh
+   10. [Task] #59151599: Compare HES and Glymour for phi lora
+      State: Proposed | Assigned: Om Singh
+   11. [Deliverable] #59247100: DIO : EP ingestion into PS-ORT for new NPU
+      State: Proposed | Assigned: Om Singh
+   12. [Scenario] #58805666: DIO: EP Ingestion into PS-ORT for New NPU
+      State: Proposed | Assigned: Om Singh
+   13. [Deliverable] #58244250: Test Concurrency and Compare - Concurrent Implemenation
+      State: Proposed | Assigned: Om Singh
+   14. [Bug] #58244569: [Appverfier][Cadmus]: unallocated memory issue while running PS with appverfier
+      State: Active | Assigned: Om Singh
+   15. [Bug] #58075468: [AppVerifier][STX]: Heap Allocation Leak while running PS API
+      State: Active | Assigned: Om Singh
+
+📋 All Team Work Items:
+   1. [Bug] #57144101: [Watson Failure] [LNL] caused by ACCESS_VIOLATION_c0000005_s...
+      State: Active | Assigned: Daniel Rings
+   2. [Bug] #56051673: [UIB] TipFailure - FailedToGetImageStore(0) with hresult -21...
+      State: Active | Assigned: Ben Kuhn
+   3. [Bug] #59205498: PTL: MEP_3.0.2_attested package showing only Automatic Frami...
+      State: Active | Assigned: Shravya Sirivoru
+   4. [Bug] #57723926: [MS->Intel] [AI]Intel's NPU stack fails the SDXL performance...
+      State: Resolved | Assigned: Akhil Mehnot
+   5. [Bug] #57706638: [MS->AMD] AMD's NPU stack fails the individual Stable Diffus...
+      State: Active | Assigned: Partner Portal
+
+🎉 ADO API Test Complete!
+✅ Backend server is working
+✅ PAT authentication successful
+✅ ADO integration functional
+✅ Ready for frontend development
