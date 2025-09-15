@@ -1,224 +1,260 @@
-# WorkSync AI - Hackathon API Documentation
+# WorkSync AI - API Documentation
 
 ## Overview
 
-The WorkSync AI hackathon demo provides essential REST API endpoints for Microsoft OAuth authentication, Azure DevOps integration, and AI-powered task prioritization. Built for 20-hour implementation focused on core demo functionality.
+WorkSync AI provides RESTful API endpoints for Azure DevOps integration with plans for Microsoft Graph integration and AI-powered task prioritization. Currently in Phase 1 with a solid foundation ready for hackathon demo expansion.
+
+## Implementation Phases
+
+**✅ Phase 1 (COMPLETED)**: Secure ADO integration foundation  
+**🚧 Phase 2 (HACKATHON SPRINT)**: Microsoft Graph + AI Priority Engine  
+**🎯 Phase 3 (FUTURE)**: Advanced learning and team intelligence  
 
 ## Base URL
 
 ```
-Development: http://localhost:3001/api
-Production: https://your-domain.com/api
+Development: http://localhost:3001
+Production: TBD
 ```
 
-## Authentication
+---
 
-All protected endpoints require Microsoft OAuth authentication. The system uses OAuth 2.0 tokens from Microsoft Azure AD.
+## Phase 1 API Endpoints (CURRENT)
 
-### Authentication Flow
+### Health & Status
 
-#### GET /auth/microsoft
-Initiate Microsoft OAuth 2.0 authentication flow.
-
-**Response:**
-Redirects to Microsoft OAuth consent screen.
-
-#### POST /auth/callback
-Handle OAuth callback from Microsoft.
-
-**Request Body:**
-```json
-{
-  "code": "oauth-authorization-code",
-  "state": "anti-csrf-state-token"
-}
-```
+#### GET /health
+Server health check and status.
 
 **Response:**
 ```json
 {
-  "success": true,
-  "data": {
-    "user": {
-      "id": "microsoft-user-id",
-      "displayName": "John Doe",
-      "email": "john.doe@company.com",
-      "tenantId": "azure-tenant-id"
-    },
-    "accessToken": "encrypted-oauth-token",
-    "sessionToken": "jwt-session-token"
-  }
+  "status": "healthy",
+  "timestamp": "2025-09-15T16:07:15.123Z",
+  "version": "1.0.0",
+  "uptime": 3600
 }
 ```
 
-#### GET /auth/me
-Get current authenticated user information.
+### Azure DevOps Integration
 
-**Headers:**
-```
-Authorization: Bearer <session-jwt-token>
-```
+#### GET /api/v1/ado/test-connection
+Test ADO connection and authentication.
 
 **Response:**
 ```json
 {
   "success": true,
-  "data": {
-    "user": {
-      "id": "microsoft-user-id",
-      "displayName": "John Doe",
-      "email": "john.doe@company.com",
-      "adoOrgUrl": "https://dev.azure.com/company",
-      "preferences": {
-        "timezone": "UTC-8",
-        "notifications": true
-      }
-    }
-  }
+  "message": "ADO connection successful", 
+  "organization": "microsoft.visualstudio.com",
+  "user": "authenticated-user@microsoft.com"
 }
 ```
 
-#### POST /auth/logout
-Logout user and invalidate session.
-
-## Azure DevOps Integration
-
-#### GET /ado/projects
-List user's Azure DevOps projects.
+#### GET /api/v1/ado/projects
+Discover all accessible ADO projects for authenticated user.
 
 **Response:**
 ```json
 {
   "success": true,
-  "data": {
-    "projects": [
-      {
-        "id": "project-guid",
-        "name": "Company Product",
-        "description": "Main product development",
-        "visibility": "private",
-        "lastUpdated": "2024-01-15T10:00:00Z"
-      }
-    ]
-  }
-}
-```
-
-#### GET /ado/workitems
-Fetch work items from Azure DevOps.
-
-**Query Parameters:**
-- `projectId`: ADO project ID (required)
-- `assignedToMe`: Filter to current user's tasks (default: true)
-- `states`: Comma-separated list of states (default: "New,Active,Resolved")
-- `workItemTypes`: Comma-separated types (default: "Task,Bug,User Story")
-- `limit`: Number of items to return (default: 50)
-
-**Response:**
-```json
-{
-  "success": true,
-  "data": {
-    "workItems": [
-      {
-        "id": 12345,
-        "title": "Fix login authentication bug",
-        "description": "Users unable to login with SSO",
-        "state": "Active",
-        "priority": 1,
-        "workItemType": "Bug",
-        "assignedTo": {
-          "displayName": "John Doe",
-          "email": "john.doe@company.com"
-        },
-        "createdDate": "2024-01-10T09:00:00Z",
-        "dueDate": "2024-01-18T17:00:00Z",
-        "tags": ["authentication", "security", "urgent"],
-        "url": "https://dev.azure.com/company/_workitems/edit/12345",
-        "aiPriorityScore": null,
-        "priorityReason": null
-      }
-    ],
-    "totalCount": 25
-  }
-}
-```
-
-#### GET /ado/workitems/:id
-Get specific work item details.
-
-**Response:**
-```json
-{
-  "success": true,
-  "data": {
-    "workItem": {
-      "id": 12345,
-      "title": "Fix login authentication bug",
-      "description": "Users unable to login with SSO",
-      "state": "Active",
-      "priority": 1,
-      "workItemType": "Bug",
-      "assignedTo": {
-        "displayName": "John Doe",
-        "email": "john.doe@company.com"
-      },
-      "createdDate": "2024-01-10T09:00:00Z",
-      "dueDate": "2024-01-18T17:00:00Z",
-      "acceptanceCriteria": "Users can login successfully with SSO",
-      "reproductionSteps": "1. Navigate to login page...",
-      "tags": ["authentication", "security", "urgent"],
-      "comments": [
-        {
-          "author": "jane.smith@company.com",
-          "text": "This is blocking the release, urgent fix needed",
-          "createdDate": "2024-01-12T14:30:00Z"
-        }
-      ],
-      "url": "https://dev.azure.com/company/_workitems/edit/12345"
-    }
-  }
-}
-```
-
-## AI Priority Engine
-
-#### POST /priority/analyze
-Analyze tasks and calculate AI priority scores.
-
-**Request Body:**
-```json
-{
-  "workItems": [
+  "data": [
     {
-      "id": 12345,
-      "title": "Fix login authentication bug",
-      "priority": 1,
-      "dueDate": "2024-01-18T17:00:00Z",
-      "workItemType": "Bug",
-      "tags": ["authentication", "security", "urgent"]
+      "id": "8d47e068-03c8-4cdc-aa9b-fc6929290322",
+      "name": "OS",
+      "description": "Operating System Development",
+      "state": "wellFormed",
+      "visibility": "private",
+      "lastUpdated": "2025-09-15T10:00:00Z",
+      "url": "https://dev.azure.com/microsoft/OS"
     }
   ],
-  "communicationContext": {
-    "teamsMessages": [
+  "count": 124
+}
+```
+
+#### GET /api/v1/ado/backlog/:projectId
+Get personal backlog items from specific ADO project.
+
+**Path Parameters:**
+- `projectId` (string, required): ADO project GUID
+
+**Query Parameters:**
+- `assignedToMe` (boolean): Filter to current user's assignments (default: true)
+- `states` (string): Comma-separated states (default: "Started,Committed,Proposed,Active")  
+- `types` (string): Comma-separated work item types (default: "Task,Bug,Scenario,Deliverable")
+- `top` (number): Maximum results to return (default: 50)
+
+**Example:**
+```
+GET /api/v1/ado/backlog/8d47e068-03c8-4cdc-aa9b-fc6929290322?assignedToMe=true&states=Active,Started&types=Bug,Task&top=10
+```
+
+**Response:**
+```json
+{
+  "success": true,
+  "data": {
+    "backlogItems": [
       {
-        "text": "Login bug is urgent - blocking client demo",
-        "mentions": ["12345"],
-        "timestamp": "2024-01-15T11:00:00Z"
+        "id": 12345,
+        "title": "Fix critical authentication bug in login service",
+        "workItemType": "Bug", 
+        "state": "Active",
+        "assignedTo": {
+          "displayName": "John Doe",
+          "email": "user@microsoft.com",
+          "id": "microsoft-user-guid"
+        },
+        "priority": 1,
+        "severity": "High",
+        "tags": ["authentication", "urgent", "client-facing"],
+        "createdDate": "2025-09-10T09:00:00Z",
+        "changedDate": "2025-09-15T14:30:00Z",
+        "dueDate": "2025-09-18T17:00:00Z",
+        "url": "https://dev.azure.com/microsoft/OS/_workitems/edit/12345",
+        "project": {
+          "id": "8d47e068-03c8-4cdc-aa9b-fc6929290322", 
+          "name": "OS"
+        }
       }
     ],
+    "totalCount": 45,
+    "filteredCount": 10,
+    "queryInfo": {
+      "assignedToMe": true,
+      "states": ["Active", "Started"],
+      "types": ["Bug", "Task"]
+    }
+  }
+}
+```
+
+#### GET /api/v1/ado/workitem/:workItemId
+Get detailed information for specific work item.
+
+**Path Parameters:**
+- `workItemId` (number, required): ADO work item ID
+
+**Response:**
+```json
+{
+  "success": true,
+  "data": {
+    "id": 12345,
+    "title": "Fix critical authentication bug in login service",
+    "description": "Users are unable to login when using SSO authentication. Error appears intermittently and affects 20% of login attempts.",
+    "workItemType": "Bug",
+    "state": "Active", 
+    "assignedTo": {
+      "displayName": "John Doe",
+      "email": "user@microsoft.com",
+      "id": "microsoft-user-guid"
+    },
+    "priority": 1,
+    "severity": "High",
+    "effort": 8,
+    "tags": ["authentication", "urgent", "client-facing"],
+    "acceptanceCriteria": "Users can successfully login with SSO 100% of the time",
+    "reproductionSteps": "1. Navigate to login page\n2. Click 'Sign in with SSO'\n3. Enter credentials\n4. Observe intermittent failures",
+    "createdDate": "2025-09-10T09:00:00Z", 
+    "changedDate": "2025-09-15T14:30:00Z",
+    "dueDate": "2025-09-18T17:00:00Z",
+    "url": "https://dev.azure.com/microsoft/OS/_workitems/edit/12345",
+    "project": {
+      "id": "8d47e068-03c8-4cdc-aa9b-fc6929290322",
+      "name": "OS"
+    }
+  }
+}
+```
+
+---
+
+## Phase 2 API Endpoints (HACKATHON SPRINT)
+
+### Microsoft Graph Integration (Planned)
+
+#### GET /api/v1/graph/teams/messages
+Scan Teams chats for work item mentions and urgency signals.
+
+**Query Parameters:**
+- `workItemId` (number): Focus on specific work item
+- `timeRange` (string): Time window ("1h", "6h", "24h", "7d")
+- `urgencyKeywords` (boolean): Filter for urgency indicators
+
+**Planned Response:**
+```json
+{
+  "success": true,
+  "data": {
+    "messages": [
+      {
+        "id": "teams-message-id",
+        "text": "Bug 12345 is critical - customer escalation received!",
+        "author": "manager@microsoft.com",
+        "timestamp": "2025-09-15T08:00:00Z",
+        "urgencyScore": 0.9,
+        "workItemMentions": [12345],
+        "urgencyKeywords": ["critical", "escalation"],
+        "chatId": "teams-chat-id"
+      }
+    ],
+    "summary": {
+      "totalMessages": 15,
+      "urgentMessages": 3,
+      "workItemMentions": 8,
+      "averageUrgencyScore": 0.6
+    }
+  }
+}
+```
+
+#### GET /api/v1/graph/outlook/emails
+Find emails related to specific work items.
+
+**Planned Response:**
+```json
+{
+  "success": true,
+  "data": {
     "emails": [
       {
-        "subject": "Critical: Authentication issue",
-        "body": "Work item 12345 needs immediate attention",
-        "timestamp": "2024-01-15T09:30:00Z"
+        "id": "outlook-message-id", 
+        "subject": "URGENT: Release blocker in work item 12345",
+        "snippet": "This authentication issue is preventing our sprint delivery...",
+        "sender": "product.owner@microsoft.com",
+        "timestamp": "2025-09-15T10:30:00Z",
+        "urgencyScore": 0.95,
+        "workItemMentions": [12345],
+        "urgencyKeywords": ["urgent", "blocker", "release"]
       }
     ]
   }
 }
 ```
 
-**Response:**
+### AI Priority Engine (Planned)
+
+#### POST /api/v1/ai/analyze-priorities
+Analyze tasks with communication context for intelligent prioritization.
+
+**Planned Request:**
+```json
+{
+  "workItems": [...],
+  "communicationContext": {
+    "teamsMessages": [...],
+    "outlookEmails": [...]
+  },
+  "userPreferences": {
+    "focusTime": "09:00-11:00",
+    "workStyle": "deep-work-blocks"
+  }
+}
+```
+
+**Planned Response:**
 ```json
 {
   "success": true,
@@ -227,243 +263,111 @@ Analyze tasks and calculate AI priority scores.
       {
         "workItemId": 12345,
         "aiPriorityScore": 0.95,
-        "priorityReason": "Critical bug with approaching deadline, mentioned 3x in urgent communications",
+        "newRanking": 1,
+        "originalRanking": 5,
+        "priorityReason": "Critical bug with client escalation in Teams + urgent email from PM + deadline in 3 days",
         "priorityFactors": {
-          "adoPriority": 0.4,
-          "deadlineUrgency": 0.3,
-          "communicationMentions": 0.25,
-          "workItemType": 0.0
+          "adoPriority": 0.2,
+          "deadlineUrgency": 0.3, 
+          "communicationUrgency": 0.4,
+          "businessImpact": 0.1
         },
-        "recommendedAction": "Start immediately - blocking issue",
+        "recommendedAction": "Start immediately - blocking issue for release",
         "executionGuidance": [
-          "Set up local reproduction environment",
-          "Analyze authentication flow logs",
-          "Identify root cause in SSO integration",
-          "Implement and test fix",
-          "Deploy to staging for validation"
-        ]
+          "Set up local reproduction environment for authentication flow",
+          "Review SSO integration logs from past 7 days",
+          "Identify root cause in authentication service",
+          "Implement fix with automated test coverage", 
+          "Deploy to staging environment for validation",
+          "Coordinate with QA team for regression testing"
+        ],
+        "estimatedTime": "6-8 hours",
+        "blockers": [],
+        "dependencies": []
       }
     ]
   }
 }
 ```
 
-#### GET /priority/recommendations
-Get general priority recommendations for current user.
+#### GET /api/v1/ai/guidance/:workItemId
+Get AI-generated execution guidance for specific task.
 
-**Response:**
-```json
-{
-  "success": true,
-  "data": {
-    "recommendations": [
-      {
-        "type": "urgent_tasks",
-        "title": "3 critical tasks need immediate attention",
-        "taskIds": [12345, 12346, 12347],
-        "reason": "These tasks have urgent communications and approaching deadlines"
-      },
-      {
-        "type": "quick_wins",
-        "title": "Complete 2 simple tasks for productivity boost",
-        "taskIds": [12350, 12351],
-        "reason": "Low complexity tasks that can be finished quickly"
-      },
-      {
-        "type": "blocked_items",
-        "title": "1 task needs dependency resolution",
-        "taskIds": [12348],
-        "reason": "Task blocked by external dependency, requires follow-up"
-      }
-    ]
-  }
-}
-```
+#### POST /api/v1/ai/feedback
+Submit user feedback on AI recommendations for learning.
 
-## User Feedback System
+---
 
-#### POST /feedback
-Submit user feedback on AI recommendations.
+## Authentication & Security
 
-**Request Body:**
-```json
-{
-  "workItemId": 12345,
-  "sessionId": "demo-session-uuid",
-  "rating": 5,
-  "followedRecommendation": true,
-  "feedback": "Excellent prioritization - helped me focus on urgent bug",
-  "actualOutcome": "Completed task ahead of deadline"
-}
-```
+### Current (Phase 1)
+- **Personal Access Token (PAT)**: Via environment variable
+- **Scope**: Work Items (read)
+- **Organization**: Configurable via environment
 
-**Response:**
-```json
-{
-  "success": true,
-  "data": {
-    "feedbackId": "feedback-uuid",
-    "recorded": true,
-    "learningImpact": "Positive feedback helps improve future recommendations"
-  }
-}
-```
+### Future (Phase 2)
+- **Microsoft OAuth2**: Full Graph API integration
+- **Scopes**: ADO, Teams.ReadBasic.All, Mail.Read
+- **Token Management**: Secure refresh handling
 
-#### GET /feedback/summary
-Get feedback summary for learning insights.
-
-**Response:**
-```json
-{
-  "success": true,
-  "data": {
-    "summary": {
-      "totalFeedback": 47,
-      "averageRating": 4.3,
-      "recommendationAccuracy": 0.89,
-      "userSatisfaction": 0.91
-    },
-    "insights": [
-      "Users prefer detailed execution guidance",
-      "Communication context significantly improves accuracy",
-      "Deadline proximity is most important priority factor"
-    ]
-  }
-}
-```
-
-## Demo Support Endpoints
-
-#### GET /demo/sample-data
-Get sample communication data for demonstration.
-
-**Response:**
-```json
-{
-  "success": true,
-  "data": {
-    "teamsMessages": [
-      {
-        "text": "Bug 12345 is critical - customer escalation received",
-        "author": "manager@company.com",
-        "timestamp": "2024-01-15T08:00:00Z",
-        "urgencyKeywords": ["critical", "escalation"],
-        "mentions": ["12345"]
-      }
-    ],
-    "emails": [
-      {
-        "subject": "URGENT: Release blocker in work item 12346", 
-        "snippet": "This issue is preventing our sprint delivery...",
-        "sender": "product.owner@company.com",
-        "timestamp": "2024-01-15T10:30:00Z",
-        "urgencyKeywords": ["urgent", "blocker"],
-        "mentions": ["12346"]
-      }
-    ]
-  }
-}
-```
-
-#### POST /demo/reset
-Reset demo state for fresh presentation.
-
-**Request Body:**
-```json
-{
-  "sessionId": "demo-session-uuid",
-  "preserveAuth": true
-}
-```
+---
 
 ## Error Handling
 
-All endpoints return consistent error responses:
+All endpoints return consistent error format:
 
 ```json
 {
   "success": false,
   "error": {
-    "code": "MICROSOFT_AUTH_ERROR",
-    "message": "Microsoft OAuth token has expired",
-    "details": {
-      "action": "Please login again with Microsoft account",
-      "redirectUrl": "/api/auth/microsoft"
-    }
+    "code": "ADO_CONNECTION_FAILED",
+    "message": "Unable to connect to Azure DevOps API",
+    "details": "Personal Access Token may be invalid or expired",
+    "timestamp": "2025-09-15T16:07:15.123Z",
+    "requestId": "req-uuid-12345"
   }
 }
 ```
 
 ### Common Error Codes
-
-- `MICROSOFT_AUTH_ERROR`: OAuth authentication issues
-- `ADO_API_ERROR`: Azure DevOps API integration error
+- `ADO_AUTH_ERROR`: ADO authentication failure
+- `ADO_PROJECT_NOT_FOUND`: Project access denied or not found
+- `ADO_WORKITEM_NOT_FOUND`: Work item doesn't exist or no access
 - `VALIDATION_ERROR`: Request parameter validation failed
-- `NOT_FOUND`: Resource not found
-- `RATE_LIMIT_EXCEEDED`: API rate limits exceeded
-- `DEMO_DATA_ERROR`: Demo simulation data issues
-
-## Rate Limiting
-
-API requests are rate-limited for demo stability:
-
-- **Authentication endpoints**: 10 requests per minute
-- **ADO integration**: 30 requests per minute  
-- **AI priority analysis**: 20 requests per minute
-- **User feedback**: 100 requests per minute
-
-Rate limit headers:
-
-```
-X-RateLimit-Limit: 30
-X-RateLimit-Remaining: 25
-X-RateLimit-Reset: 1640995260
-```
-
-## Demo Environment Configuration
-
-Essential environment variables for hackathon demo:
-
-```bash
-# Microsoft OAuth Configuration
-MICROSOFT_CLIENT_ID=your-azure-app-registration-id
-MICROSOFT_CLIENT_SECRET=your-azure-app-secret
-MICROSOFT_REDIRECT_URI=http://localhost:3001/api/auth/callback
-MICROSOFT_AUTHORITY=https://login.microsoftonline.com/common
-
-# Azure DevOps Configuration  
-ADO_ORGANIZATION=your-company-ado-org
-ADO_API_VERSION=6.0
-
-# Demo Configuration
-DEMO_MODE=true
-DEMO_SESSION_TIMEOUT=3600
-SAMPLE_DATA_ENABLED=true
-
-# Application Configuration
-JWT_SECRET=your-demo-jwt-secret
-DATABASE_PATH=./demo.sqlite
-PORT=3001
-```
-
-## Hackathon Demo Script Integration
-
-This API supports the 5-minute demo flow:
-
-1. **Minute 1: Problem Setup**
-   - `GET /ado/workitems` - Show tasks with equal ADO priority
-   - `GET /demo/sample-data` - Display urgent communication context
-
-2. **Minutes 2-4: WorkSync Solution**  
-   - `GET /auth/microsoft` - Microsoft OAuth login
-   - `GET /ado/workitems` - Load user's real ADO tasks
-   - `POST /priority/analyze` - AI re-prioritization with reasoning
-   - `GET /ado/workitems/:id` - Task details with execution guidance
-
-3. **Minute 5: Learning Foundation**
-   - `POST /feedback` - User rating demonstration
-   - `GET /feedback/summary` - Learning metrics display
+- `RATE_LIMIT_EXCEEDED`: ADO API rate limits exceeded
+- `INTERNAL_ERROR`: Server-side processing error
 
 ---
 
-**Built for Hackathon Success** - Essential API endpoints to demonstrate enterprise integration concept with Microsoft ecosystem in 20-hour development sprint.
+## Testing
+
+Run the comprehensive test suite:
+```bash
+cd backend
+npm test
+```
+
+**Test Coverage:**
+- ✅ Health check endpoint functionality
+- ✅ ADO connection and authentication validation
+- ✅ Project discovery with real ADO organization
+- ✅ Work item retrieval with various filter combinations
+- ✅ Error handling and edge cases
+- ✅ Rate limiting and timeout scenarios
+
+---
+
+## Rate Limiting
+
+**ADO API Constraints:**
+- 200 requests per hour per PAT
+- Backoff strategy implemented for rate limit errors
+- Headers include rate limit status
+
+**Planned Graph API:**
+- Teams: 600 requests per 20 minutes
+- Outlook: 10,000 requests per 10 minutes per application
+
+---
+
+**This API foundation enables the hackathon vision: from scattered task chaos to intelligent, automated workflow decisions.**
